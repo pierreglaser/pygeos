@@ -264,6 +264,19 @@ static PyObject *GeometryObject_new(PyTypeObject *type, PyObject *args,
     }
 }
 
+static PyObject *
+GeometryObject___reduce__(PyObject *obj)
+{
+    PyObject *newarg = NULL, *newfunc = NULL, *towkt = NULL, *newargs = NULL;
+    newfunc = PyObject_GetAttrString(obj, "__new__");
+    towkt = PyObject_GetAttrString(obj, "to_wkt");
+
+    newarg = _PyObject_CallNoArg(towkt);
+    newargs = Py_BuildValue("(O(O))", newfunc, newarg);
+
+    return newargs;
+}
+
 static PyMethodDef GeometryObject_methods[] = {
     {"to_wkt", (PyCFunction) GeometryObject_ToWKT, METH_VARARGS | METH_KEYWORDS,
      "Write the geometry to Well-Known Text (WKT) format"
@@ -276,6 +289,9 @@ static PyMethodDef GeometryObject_methods[] = {
     },
     {"from_wkb", (PyCFunction) GeometryObject_FromWKB, METH_CLASS | METH_O,
      "Read the geometry from Well-Known Binary (WKB) format"
+    },
+    {"__reduce__", (PyCFunction) GeometryObject___reduce__, METH_NOARGS,
+     "reduces a geometry object"
     },
     {NULL}  /* Sentinel */
 };

@@ -78,6 +78,9 @@ def get_geos_paths():
     for item in get_geos_config("--cflags").split():
         if item.startswith("-I"):
             include_dirs.extend(item[2:].split(":"))
+    print("-----------------------")
+    print(get_geos_config("--clibs"))
+    print("-----------------------")
     for item in get_geos_config("--clibs").split():
         if item.startswith("-L"):
             library_dirs.extend(item[2:].split(":"))

@@ -82,13 +82,13 @@ GEOMETRY_getitem(void *ip, void* NPY_UNUSED(arr))
 {
   printf("In GEOMETRY_getitem\n");
   PyObject *obj;
-  NPY_COPY_PYOBJECT_PTR(&obj, ip);
+  memcpy(&obj, ip, sizeof(PyObject *));
   if (obj == NULL) {
     Py_RETURN_NONE;
   }
   else {
-    Py_INCREF(obj);
-    return obj;
+    Py_INCREF((PyObject *)obj);
+    return (PyObject *)obj;
   }
 }
 
